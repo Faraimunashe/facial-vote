@@ -1,0 +1,88 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="pagetitle">
+    <h1>Voting Window</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Voting</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section" >
+    <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages() %} 
+                {% if messages %} 
+                    {% if "error" in messages[0] %}
+                        <div class="alert alert-danger" role="alert">
+                            {{messages[0]}}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success" role="alert">
+                            {{messages[0]}}
+                        </div>
+                    {% endif %} 
+                {% endif %} 
+            {% endwith %}
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                {% if not candidates %}
+                    <div class="col-md-12">
+                        <div class="alert alert-dark" role="alert">
+                            There are no registered candidates yet!
+                        </div>
+                    </div>
+                {% endif %}
+                {% for candidate in candidates %}
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{candidate.fullname}} 
+                                    {% if result.candidateid == candidate.id %}
+                                        <span class="badge bg-info" style="float: right;">choise</span>
+                                    {% endif %}
+                                </h5>
+                                <div class="" style="text-align: center;">
+                                    <img src="/static/candidates/{{candidate.image}}" height="230" width="230" alt="">
+                                </div>
+                                {% if not result %}
+                                    <form action="/vote" method="POST">
+                                        <input type="hidden" name="candidate_id" value="{{candidate.id}}" required>
+                                        <div class="d-grid gap-2 mt-3">
+                                            <button class="btn btn-primary" type="submit">Vote</button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="basicModal" tabindex="-1" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" action="/results" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h5 class="modal-title">Publish Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to publish voting results now? Users will be able to see the results after confirming.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Yes publish</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}
+        

@@ -1,0 +1,68 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="pagetitle">
+    <h1>Results</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Results</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section" >
+    <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages() %} 
+                {% if messages %} 
+                    {% if "error" in messages[0] %}
+                        <div class="alert alert-danger" role="alert">
+                            {{messages[0]}}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success" role="alert">
+                            {{messages[0]}}
+                        </div>
+                    {% endif %} 
+                {% endif %} 
+            {% endwith %}
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive text-nowrap">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Results</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Fullname</th>
+                                    <th>Part</th>
+                                    <th>Votes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set count = 0 %}
+                                {% for candidate in candidates %}
+                                    <tr>
+                                        <td>
+                                            {% set count = count + 1 %}
+                                            {{ count }}
+                                        </td>
+                                        <td>{{candidate.fullname}}</td>
+                                        <td>{{candidate.part}}</td>
+                                        <td>{{candidate[3]}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+        
