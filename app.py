@@ -11,6 +11,7 @@ from textblob import TextBlob
 from flask_mail import Mail, Message
 import random
 import json
+import re
 from face import detect
 
 
@@ -122,15 +123,15 @@ def detect_faces_in_image(file_stream, natid):
 def login():
     if request.method == 'POST':
         if 'file' not in request.files:
-            flash('Image not posted')
-            return redirect(url_for(login))
+            flash('error image not posted')
+            return redirect(url_for('login'))
 
         file = request.files['file']
         natid = request.form.get('natid')
 
         if file.filename == '' or natid == '':
-            flash('file name is empty')
-            return redirect(url_for(login))
+            flash('error file name is empty')
+            return redirect(url_for('login'))
 
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
@@ -145,6 +146,10 @@ def login():
     return render_template('login.html')
 
 
+def national_id(value):
+    pattern = r'^[0-9]{2}[0-1][0-9][0-3][0-9][0-9A-Z]{6}$'
+    return re.match(pattern, value) is not None
+
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 @admin_role
@@ -152,7 +157,7 @@ def index():
     if request.method == 'POST':
         print(request.files)
         if 'file' not in request.files:
-            flash('Image not posted')
+            flash('error Image not posted')
             return redirect(url_for('index'))
 
         file = request.files['file']
@@ -163,8 +168,12 @@ def index():
         phone = request.form.get('phone')
         address = request.form.get('address')
 
+        if not national_id(natid):
+            flash('error not zimbabwean natinal id')
+            return redirect(url_for('index'))
+
         if file.filename == '' or fname == '' or lname == '' or natid == '' or sex == '' or phone == '' or address == '':
-            flash('some fields are empty')
+            flash('error some fields are empty')
             return redirect(url_for('index'))
         
         user = User.query.filter_by(natid=natid).first()

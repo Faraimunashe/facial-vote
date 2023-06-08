@@ -31,7 +31,7 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                        {% if current_user.id == 1 %}
+                        {% if current_user.role == 1 %}
                             <li>
                                 <a href="/" class="nav-link text-white">
                                     <span class="bi d-block mx-auto mb-1" width="24" height="24">
@@ -78,7 +78,7 @@
                       <li class="nav-item dropdown pe-3">
                           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                               <img src="{{url_for('static', filename='images/user.jpg')}}" height="45" alt="Profile" class="rounded-circle mt-1">
-                              <span class="d-none d-md-block dropdown-toggle ps-2">{{ current_user.fname }} {{ current_user.lname }}</span>
+                              <span class="d-none d-md-block dropdown-toggle ps-2 text-white pt-4">{{ current_user.fname }} {{ current_user.lname }}</span>
                           </a><!-- End Profile Iamge Icon -->
                   
                           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
